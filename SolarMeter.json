@@ -15,7 +15,7 @@
 		"path": "enphase_local",
 		"poll_interval":60,
 		"config": { 
-			"ip":"192.168.178.112"
+			"ip":""
 		}
 	},{
 		"id": 2,
@@ -24,9 +24,9 @@
 		"path": "enphase_remote",
 		"poll_interval":900,
 		"config": { 
-			"api_key":"89db3fb9b756c1bb4de3b71bdda3782f",
-			"user_id":"4d546b314e444d320a",
-			"system_id":"205074"
+			"api_key":"",
+			"user_id":"",
+			"system_id":""
 		}
 	},{
 		"id": 3,
