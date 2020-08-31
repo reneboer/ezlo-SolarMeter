@@ -1,0 +1,41 @@
+{
+	"id": "SolarMeter",
+	"version": "1.0",
+	"type": "gateway",
+	"dependencies": {
+		"firmware": "1.0",
+		"addons": [
+			{
+				"id": "lua",
+				"version": "1.0"
+			}
+		]
+	},
+	"permissions": [ "core", "storage", "timer", "http", "debug" ],
+	"startup": "scripts/startup",
+	"teardown": "scripts/teardown",
+	"gateway": {
+		"name": "SolarMeter",
+		"label": "Solar Meter",
+		"reason": "Start bus",
+		"unreachableReasons": [
+			{ 
+				"reason": "1. No reason",
+				"advice": "Do nothing"
+			}
+		],
+		"unreachableActions": [
+			{ 
+				"label": "Do nothing",
+				"method": "do_nothing"
+			}
+		],
+		"forceRemoveDeviceCommand":"HUB:SolarMeter/scripts/delete_device",
+		"setItemValueCommand": "HUB:SolarMeter/scripts/set_item_value",
+		"setItemValueResponsePolicy": "",
+		"addItemDictionaryValueCommand": "",
+		"setItemDictionaryValueCommand": "",
+		"removeItemDictionaryValueCommand": "",
+		"operations": []
+	}
+}

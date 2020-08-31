@@ -1,0 +1,84 @@
+{
+  "config": {
+	"label":"Universal Solar Meter",
+	"author":"Rene Boer",
+	"version":"1.0",
+	"log_level":3,
+	"remove_inactive":false
+  },
+  "devices": 
+  [ 
+	{
+		"id": 1,
+		"name": "Enphase Local API",
+		"active": true,
+		"path": "enphase_local",
+		"poll_interval":60,
+		"config": { 
+			"ip":"192.168.178.112"
+		}
+	},{
+		"id": 2,
+		"name": "Enphase Remote API",
+		"active": true,
+		"path": "enphase_remote",
+		"poll_interval":900,
+		"config": { 
+			"api_key":"89db3fb9b756c1bb4de3b71bdda3782f",
+			"user_id":"4d546b314e444d320a",
+			"system_id":"205074"
+		}
+	},{
+		"id": 3,
+		"name": "Solar Edge",
+		"active": false,
+		"path": "solar_egde",
+		"poll_interval":900,
+		"config": { 
+			"api_key":"",
+			"system_id":""
+		}
+	},{
+		"id": 4,
+		"name": "PV Output",
+		"active": false,
+		"path": "pv_output",
+		"poll_interval":900,
+		"config": { 
+			"api_key":"",
+			"system_id":"",
+			"https":true
+		}
+	},{
+		"id": 5,
+		"name": "Sungrow",
+		"active": false,
+		"path": "sungrow",
+		"poll_interval":900,
+		"config": { 
+			"user_id":"",
+			"password":""
+		}
+	},{
+		"id": 6,
+		"name": "Fronius",
+		"active": false,
+		"path": "fronius",
+		"poll_interval":900,
+		"config": { 
+			"ip":"",
+			"device_id":""
+		}
+	},{
+		"id": 7,
+		"name": "Solarman",
+		"active": false,
+		"path": "solarman",
+		"poll_interval":900,
+		"config": { 
+			"token":"",
+			"device_id":""
+		}
+	} 
+  ]
+}
