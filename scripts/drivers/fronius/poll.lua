@@ -14,7 +14,7 @@ local function d_poll(device)
 	if device then
 		local cnf = device.config
 		URI = URI:format(cnf.ip,cnf.device_id)
-		local hndlr = "HUB:"..PLUGIN.."/scripts/drivers/fronius/update"
+		local hndlr = "HUB:"..PLUGIN.."/scripts/update_http"
 		logger.debug("URL %1, handler %2", URI, hndlr)
 		http.request { url = URI, handler = hndlr, user_data = device.device_id }
 	else

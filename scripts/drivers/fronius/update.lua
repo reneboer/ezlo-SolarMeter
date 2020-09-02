@@ -7,7 +7,7 @@ local function d_update(device, data)
 
 	local function GetAsNumber(value)
 		if type(value) == "number" then return value end
-		local nv = tonumber(value,10)
+		local nv = tonumber(value)
 		return (nv or 0)
 	end
 
@@ -16,7 +16,7 @@ local function d_update(device, data)
 	local retData = json.decode(data)
 	if type(retData) == "table" then
 		retData = retData.Body.Data
-		local id = math.floor(dev.id)
+		local id = math.floor(device.id)
 		if retData.PAC then -- is missing when no energy is produced
 			watts = GetAsNumber(retData.PAC.Value)
 		else
