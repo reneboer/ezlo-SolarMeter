@@ -9,6 +9,9 @@ local function d_add(params)
 	-- Check device specific configuration
 	local config = params.config
 	assert(config.api_key, "API Key missing, check SolarMeter.json configuration.")
+	assert(config.system_id, "System ID missing, check SolarMeter.json configuration.")
+	assert(config.api_key ~= "", "API Key empty, check SolarMeter.json configuration.")
+	assert(config.system_id ~= "", "System ID empty, check SolarMeter.json configuration.")
 
 	-- Set device specific variables.
 	local device = params.device

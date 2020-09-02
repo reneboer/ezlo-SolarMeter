@@ -7,7 +7,7 @@ local function d_update(device, data)
 	
 	local function GetAsNumber(value)
 		if type(value) == "number" then return value end
-		local nv = tonumber(value,10)
+		local nv = tonumber(value)
 		return (nv or 0)
 	end
 
@@ -18,7 +18,7 @@ local function d_update(device, data)
 		watts = GetAsNumber(retData.currentPower.power)
 		DayKWH = GetAsNumber(retData.lastDayData.energy)/1000
 		if DayKWH ~= -1 then
-			WeekKWH = loadfile("HUB:"..PLUGIN.."/scripts/utils/week_total")().total(DayKWH, dev.id)
+			WeekKWH = loadfile("HUB:"..PLUGIN.."/scripts/utils/week_total")().total(DayKWH, device.id)
 		end	
 		MonthKWH = GetAsNumber(retData.lastMonthData.energy)/1000
 		YearKWH = GetAsNumber(retData.lastYearData.energy)/1000
