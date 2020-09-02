@@ -7,7 +7,7 @@ local function d_update(device, data)
 	
 	local function GetAsNumber(value)
 		if type(value) == "number" then return value end
-		local nv = tonumber(value,10)
+		local nv = tonumber(value)
 		return (nv or 0)
 	end
 
@@ -15,16 +15,16 @@ local function d_update(device, data)
 	logger.debug("device %1, data %2", device, data)
 	local retData = json.decode(data)
 	if type(retData) == "table" then
-		local id = math.floor(dev.id)
+	logger.debug("data %1",retData.result.deviceWapper.dataJSON)
 		for key, value in pairs(retData.result.deviceWapper.dataJSON) do
 			if key == "dt" then
-				ts = GetAsNumber(value) / 1000
+				ts = math.floor(GetAsNumber(value) / 1000)
 			elseif key == "1ab" then 		-- DC Output Total Power (Active)
 				watts = GetAsNumber(value)
 			elseif key == "1bd" then 		-- Daily Generation (Active)
 				DayKWH = GetAsNumber(value)
 				if DayKWH ~= -1 then
-					WeekKWH = loadfile("HUB:"..PLUGIN.."/scripts/utils/week_total")().total(DayKWH, id)
+					WeekKWH = loadfile("HUB:"..PLUGIN.."/scripts/utils/week_total")().total(DayKWH, device.id)
 				end	
 			elseif key == "1be" then 	-- Monthly Generation (Active)
 				MonthKWH = GetAsNumber(value)
@@ -34,7 +34,7 @@ local function d_update(device, data)
 				LifeKWH = GetAsNumber(value)
 			end	
 		end
-		if watts == -1 then watts = 0 end	-- Not sure where to get it from, return zero rather than -1
+--		if watts == -1 then watts = 0 end	-- Not sure where to get it from, return zero rather than -1
 		return {timestamp=ts, watts=watts, DayKWH=DayKWH, WeekKWH=WeekKWH, MonthKWH=MonthKWH, YearKWH=YearKWH, LifeKWH=LifeKWH}
 	else
 		logger.warn("Unexpected body data type %1, expected a JSON string.", type(retData))

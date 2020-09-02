@@ -9,8 +9,10 @@ local function d_add(params)
 	local config = params.config
 
 	-- Check configuration parameters
-	local ip = string.match(config.ip, '^(%d%d?%d?%.%d%d?%d?%.%d%d?%d?%.%d%d?%d?)')
-	assert(ip, "IP address missing/incorrect, check SolarMeter.json configuration.")
+	assert(config.token, "RememberMe token missing, check SolarMeter.json configuration.")
+	assert(config.device_id, "Device ID missing, check SolarMeter.json configuration.")
+	assert(config.token ~= "", "RememberMe token empty, check SolarMeter.json configuration.")
+	assert(config.device_id ~= "", "Device ID empty, check SolarMeter.json configuration.")
 
 	-- Set device specific variables.
 	local device = params.device

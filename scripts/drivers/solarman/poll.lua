@@ -16,14 +16,16 @@ local function d_poll(device)
 		local request_body = "deviceId=" .. cnf.device_id
 		local headers = {
 			['origin'] = 'https://home.solarman.cn',
-			['referer'] = 'https://home.solarman.cn/device/inverter/view.html?v=2.2.9.2',
+			['referer'] = 'https://home.solarman.cn/device/inverter/view.html?v=2.2.9.2&deviceId='..cnf.device_id,
 			['accept'] = 'application/json',
 			['content-type'] = 'application/x-www-form-urlencoded',
+			['accept-encoding'] = 'identity',
+			['connection'] = 'keep-alive',
 			['content-length'] = string.len(request_body),
 			['cookie'] = 'language=2; autoLogin=on; Language=en_US; rememberMe=' .. cnf.token
 		}
 		URI = URI:format(device.config.ip)
-		local hndlr = "HUB:"..PLUGIN.."/scripts/drivers/solarman/update"
+		local hndlr = "HUB:"..PLUGIN.."/scripts/update_http"
 		logger.debug("Envoy Local URL %1, handler %2", URI, hndlr)
 		http.request { url = URI, headers = headers, type = "POST", data = request_body, handler = hndlr, user_data = device.device_id }
 	else
