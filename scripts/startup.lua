@@ -2,7 +2,7 @@
 	Universal Solar Meter plugin for Ezo Linux based hubs
 	
 	File	: startup.lua
-	Version	: 0.2
+	Version	: 0.3
 	Author	: Rene Boer
 --]]
 local PLUGIN = "SolarMeter"
@@ -58,7 +58,7 @@ local function create_devices(devices)
 	local gateway_devices = {}
 	for _,d in ipairs(gw_devices) do
 		if d.gateway_id == self_id then
-			logger.debug("Device %1 id %2 table %3", d.name, d.id)
+			logger.debug("Found existing device %1 id %2", d.name, d.id)
 			gateway_devices[d.id] = d
 		end
 	end
@@ -189,8 +189,9 @@ local function startup(...)
 	-- Do plugin configuration
 	set_configuration(config.config)
 
-	-- Subscribe to all events so we can handle them.
-	core.subscribe("HUB:"..PLUGIN.."/scripts/events/handler")
+	-- Subscribe to just the events can handle.
+	-- Later add filter for just our devices 
+	core.subscribe("HUB:"..PLUGIN.."/scripts/events/handler", {exclude=false,rules={{event="device_removed"},{event="module_reset"}}})
 
 	-- Add Solar Meter power devices
 	create_devices(config.devices)
