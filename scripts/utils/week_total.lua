@@ -4,6 +4,7 @@ local calc = {}
 function calc.total(daily, id)
 	if daily == -1 then return -1 end
 	local storage = require("storage")
+	local id = math.floor(id)
 	-- See if we have a new daily value, if so recalculate
 	local lastWeekDaily = storage.get_table("WeeklyDaily"..id)
 	-- See if we have a new daily value, if so recalculate

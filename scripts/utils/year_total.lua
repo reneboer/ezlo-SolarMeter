@@ -4,6 +4,7 @@ local calc = {}
 function calc.total(monthly, id)
 	if monthly == -1 then return -1 end
 	local storage = require("storage")
+	local id = math.floor(id)
 	-- See if we have a new daily value, if so recalculate
 	local thisYearMonthly = storage.get_table("YearlyMonthly"..id)
 	local month = tonumber(os.date("%m"))
