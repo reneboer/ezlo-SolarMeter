@@ -10,6 +10,8 @@ local function d_add(params)
 	local config = params.config
 	assert(config.user_id, "User ID missing, check SolarMeter.json configuration.")
 	assert(config.password, "Password missing, check SolarMeter.json configuration.")
+	assert(config.user_id ~= "", "User ID empty, check SolarMeter.json configuration.")
+	assert(config.password ~= "", "Password empty, check SolarMeter.json configuration.")
 
 	-- Set device specific variables.
 	local device = params.device

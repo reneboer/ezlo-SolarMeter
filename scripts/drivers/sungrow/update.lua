@@ -7,7 +7,7 @@ local function d_update(device, data)
 	
 	local function GetAsNumber(value)
 		if type(value) == "number" then return value end
-		local nv = tonumber(value,10)
+		local nv = tonumber(value)
 		return (nv or 0)
 	end
 
@@ -15,12 +15,16 @@ local function d_update(device, data)
 	logger.debug("device %1, data %2", device, data)
 	local retData = json.decode(data)
 	if type(retData) == "table" then
-		local id = math.floor(dev.id)
+		local id = math.floor(device.id)
 		watts = math.floor(GetAsNumber(retData.power) * 1000)
 		DayKWH = GetAsNumber(retData.todayEnergy)
-		WeekKWH = GetWeekTotal(DayKWH)
-		MonthKWH = GetMonthTotal(DayKWH)
-		YearKWH = GetYearTotal(MonthKWH)
+		if DayKWH ~= -1 then
+			WeekKWH = loadfile("HUB:"..PLUGIN.."/scripts/utils/week_total")().total(DayKWH, id)
+			MonthKWH = loadfile("HUB:"..PLUGIN.."/scripts/utils/month_total")().total(DayKWH, id)
+			if MonthKWH ~= -1 then
+				YearKWH =loadfile("HUB:"..PLUGIN.."/scripts/utils/year_total")().total(MonthKWH, id)
+			end
+		end
 		-- Only update time stamp if watts are updated.
 		if watts == storage.get_number("Watts"..id) then
 			ts = storage.get_number("LastRefresh"..id)

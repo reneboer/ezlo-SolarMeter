@@ -15,7 +15,7 @@ local function d_poll(device)
 		logger.debug("poll.device: %1", device)
 		local cnf = device.config
 		URI = URI:format(cnf.user_id,cnf.password)
-		local hndlr = "HUB:"..PLUGIN.."/scripts/drivers/sungrow/update"
+		local hndlr = "HUB:"..PLUGIN.."/scripts/update_http"
 		logger.debug("Envoy Local URL %1, handler %2", URI, hndlr)
 		http.request { url = URI, handler = hndlr, user_data = device.device_id }
 	else
