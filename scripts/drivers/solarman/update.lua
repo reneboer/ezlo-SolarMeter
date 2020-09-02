@@ -15,7 +15,6 @@ local function d_update(device, data)
 	logger.debug("device %1, data %2", device, data)
 	local retData = json.decode(data)
 	if type(retData) == "table" then
-	logger.debug("data %1",retData.result.deviceWapper.dataJSON)
 		for key, value in pairs(retData.result.deviceWapper.dataJSON) do
 			if key == "dt" then
 				ts = math.floor(GetAsNumber(value) / 1000)
