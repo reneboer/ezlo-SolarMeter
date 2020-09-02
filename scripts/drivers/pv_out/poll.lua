@@ -14,7 +14,7 @@ local function d_poll(device)
 	if device then
 		local cnf = device.config
 		URI = URI:format((cnf.sec and "s" or ""), cnf.api_key, cnf.system_id)
-		local hndlr = "HUB:"..PLUGIN.."/scripts/drivers/pv_out/update"
+		local hndlr = "HUB:"..PLUGIN.."/scripts/update_http"
 		logger.debug("Envoy Local URL %1, handler %2", URI, hndlr)
 		http.request { url = URI, handler = hndlr, user_data = device.device_id }
 	else

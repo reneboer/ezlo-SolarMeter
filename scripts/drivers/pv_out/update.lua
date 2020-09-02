@@ -6,7 +6,7 @@ local function d_update(device, data)
 
 	local function GetAsNumber(value)
 		if type(value) == "number" then return value end
-		local nv = tonumber(value,10)
+		local nv = tonumber(value)
 		return (nv or 0)
 	end
 
@@ -15,10 +15,10 @@ local function d_update(device, data)
 	local d_t = {}
 	string.gsub(data,"(.-),", function(c) d_t[#d_t+1] = c end)
 	if #d_t > 3 then
-		local id = math.floor(dev.id)
 		watts = GetAsNumber(d_t[4])
 		DayKWH = GetAsNumber(d_t[3])/1000
 		if DayKWH ~= -1 then
+			local id = device.id
 			WeekKWH = loadfile("HUB:"..PLUGIN.."/scripts/utils/week_total")().total(DayKWH, id)
 			MonthKWH = loadfile("HUB:"..PLUGIN.."/scripts/utils/month_total")().total(DayKWH, id)
 			if MonthKWH ~= -1 then
