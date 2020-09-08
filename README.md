@@ -56,6 +56,8 @@ Making this plugin I learned some of the basics of plugin development on Ezlo. F
 
 The folder name you put the plugin files in and the id and gateway name should all be identical.
 
+You can add your own scene blocks to use in scenes in the apps. For this add a sceneBlocks line in config.json. This must point to the file having the sceneblocks definitions. See scene_blocks.json for an example. On the Ezlo Hub you can find more examples in /opt/firmware/plugins/scene_blocks/templates/scene_blocks.json for the default definitions.
+
 ### Must have code
 There are some bits of code that every plugin would probably need. These are specified in the plugin config.json
 1. startup script runs when plugin is registered and hub is rebooted.
