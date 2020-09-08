@@ -2,7 +2,7 @@
 	Universal Solar Meter plugin for Ezo Linux based hubs
 	
 	File	: startup.lua
-	Version	: 0.3
+	Version	: 2.0
 	Author	: Rene Boer
 --]]
 local PLUGIN = "SolarMeter"
@@ -110,13 +110,54 @@ local function create_devices(devices)
 				logger.info("Device for %1 exists with deviceId %2.", d.name, gw_devId)
 				device = loadfile("HUB:"..PLUGIN.."/scripts/utils/get_device")().get(gw_devId)
 			end
-			-- Set updatable parameters.
+			-- Set update-able parameters.
 			device.active = d.active
-			device.config = d.config
 			device.poll_interval = d.poll_interval
+			device.poll_dynamic = d.poll_dynamic
+			device.poll_offset = d.poll_offset
+			
+			-- See if we need to add additional items we did not have in v1.0
+			if not device.kwh_week_itemId then
+				local base_item = require("HUB:zwave/scripts/model/items/default/electric_meter_kwh")
+				base_item.device_id = gw_devId
+				base_item.name = "electric_meter_kwh_week"
+				local item, err = core.add_item(base_item)
+				if item then
+					device.kwh_week_itemId = item
+				else
+					logger.err("failed to create kwh_week item")
+				end
+				if not device.kwh_month_itemId then
+					base_item.name = "electric_meter_kwh_month"
+					local item, err = core.add_item(base_item)
+					if item then
+						device.kwh_month_itemId = item
+					else
+						logger.err("failed to create kwh_month item")
+					end
+				end	
+				if not device.kwh_year_itemId then
+					base_item.name = "electric_meter_kwh_year"
+					local item, err = core.add_item(base_item)
+					if item then
+						device.kwh_year_itemId = item
+					else
+						logger.err("failed to create kwh_year item")
+					end
+				end	
+				if not device.kwh_life_itemId then
+					base_item.name = "electric_meter_kwh_life"
+					local item, err = core.add_item(base_item)
+					if item then
+						device.kwh_life_itemId = item
+					else
+						logger.err("failed to create kwh_life item")
+					end
+				end	
+			end
 			
 			-- Update mapping variables
-			loadfile("HUB:"..PLUGIN.."/scripts/utils/set_mapping")().set(gw_devId, device)
+			loadfile("HUB:"..PLUGIN.."/scripts/utils/set_mapping")().set(gw_devId, device, d.config)
 
 			-- Device is ready to go.
 			core.update_reachable_state(gw_devId, true)
@@ -143,7 +184,13 @@ local function create_devices(devices)
 				if gw_devId then 
 					if gateway_devices[gw_devId] then
 						logger.notice("Removing device %1 name %2, no longer active in SolarMeter.json configuration.", id, d.name)
-						core.remove_device(gw_devId)
+						local rem = loadfile( "HUB:"..PLUGIN.."/scripts/delete_device" )
+						if rem then
+							rem(gw_devId)
+						else
+							logger.err("Cannot load delete_device script. Device %1 not removed.", gw_devId)
+						end
+						--core.remove_device(gw_devId)
 					end
 				end	
 			end
@@ -190,11 +237,15 @@ local function startup(...)
 	set_configuration(config.config)
 
 	-- Subscribe to just the events can handle.
-	-- Later add filter for just our devices 
-	core.subscribe("HUB:"..PLUGIN.."/scripts/events/handler", {exclude=false,rules={{event="device_removed"},{event="module_reset"}}})
+	-- Later add filter for just our devices
+	-- Removed the need to listen for core events by changing the device_deleted script.
+	-- core.subscribe("HUB:"..PLUGIN.."/scripts/events/handler", {exclude=false,rules={{event="device_removed"},{event="module_reset"}}})
 
 	-- Add Solar Meter power devices
 	create_devices(config.devices)
+	
+	-- some clean up options. used as needed.
+--	storage.delete("SM_M_5f564ef1124c4110b0d07122")
 end
 
 -- Actually run the startup function; pass all arguments, let the function sort it out.

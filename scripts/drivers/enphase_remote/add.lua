@@ -12,6 +12,9 @@ local function d_add(params)
 	assert(config.api_key, "API key missing, check SolarMeter.json configuration.")
 	assert(config.user_id, "User ID missing, check SolarMeter.json configuration.")
 	assert(config.system_id, "System ID missing, check SolarMeter.json configuration.")
+	assert(config.api_key ~= "", "API key empty, check SolarMeter.json configuration.")
+	assert(config.user_id ~= "", "User ID empty, check SolarMeter.json configuration.")
+	assert(config.system_id ~= "", "System ID empty, check SolarMeter.json configuration.")
 
 	-- Set device specific variables.
 	local device = params.device
@@ -25,6 +28,8 @@ local function d_add(params)
 	if not storage.exists("YearlyMonthly"..id) then
 		storage.set_table("YearlyMonthly"..id, {0,0,0,0,0,0,0,0,0,0,0,0})
 	end
+	storage.set_number("SM_RC_"..id, 0)
+
 end
 
 d_add(...)

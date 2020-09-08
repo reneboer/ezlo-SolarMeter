@@ -1,0 +1,137 @@
+{
+	"version": "2.0",
+	"when": [{
+		"blockId": "SolarMeter-001",
+		"item_filter": {
+			"names": ["electric_meter_kwh_week"]
+		},
+		"label": {
+			"lang_tag": "when_electric_meter_week_kwh_goes_above",
+			"text": "Whenever Solar week production goes above"
+		},
+		"blockType": "when",
+		"blockOptions": {
+			"method": {
+				"name": "compareNumbers",
+				"args": {
+					"item": "item",
+					"comparator": "comparator",
+					"value": "value"
+				}
+			}
+		},
+		"fields": [{
+			"name": "item",
+			"type": "item"
+		}, {
+			"name": "comparator",
+			"type": "string",
+			"value": ">"
+		}, {
+			"name": "value",
+			"editable": true,
+			"type": "float",
+			"value": 0.0
+		}]
+	},{
+		"blockId": "SolarMeter-002",
+		"item_filter": {
+			"names": ["electric_meter_kwh_month"]
+		},
+		"label": {
+			"lang_tag": "when_electric_meter_month_kwh_goes_above",
+			"text": "Whenever Solar month production goes above"
+		},
+		"blockType": "when",
+		"blockOptions": {
+			"method": {
+				"name": "compareNumbers",
+				"args": {
+					"item": "item",
+					"comparator": "comparator",
+					"value": "value"
+				}
+			}
+		},
+		"fields": [{
+			"name": "item",
+			"type": "item"
+		}, {
+			"name": "comparator",
+			"type": "string",
+			"value": ">"
+		}, {
+			"name": "value",
+			"editable": true,
+			"type": "float",
+			"value": 0.0
+		}]
+	},{
+		"blockId": "SolarMeter-003",
+		"item_filter": {
+			"names": ["electric_meter_kwh_year"]
+		},
+		"label": {
+			"lang_tag": "when_electric_meter_year_kwh_goes_above",
+			"text": "Whenever Solar annual production goes above"
+		},
+		"blockType": "when",
+		"blockOptions": {
+			"method": {
+				"name": "compareNumbers",
+				"args": {
+					"item": "item",
+					"comparator": "comparator",
+					"value": "value"
+				}
+			}
+		},
+		"fields": [{
+			"name": "item",
+			"type": "item"
+		}, {
+			"name": "comparator",
+			"type": "string",
+			"value": ">"
+		}, {
+			"name": "value",
+			"editable": true,
+			"type": "float",
+			"value": 0.0
+		}]
+	},{
+		"blockId": "SolarMeter-004",
+		"item_filter": {
+			"names": ["electric_meter_kwh_life"]
+		},
+		"label": {
+			"lang_tag": "when_electric_meter_life_kwh_goes_above",
+			"text": "Whenever Solar life time production goes above"
+		},
+		"blockType": "when",
+		"blockOptions": {
+			"method": {
+				"name": "compareNumbers",
+				"args": {
+					"item": "item",
+					"comparator": "comparator",
+					"value": "value"
+				}
+			}
+		},
+		"fields": [{
+			"name": "item",
+			"type": "item"
+		}, {
+			"name": "comparator",
+			"type": "string",
+			"value": ">"
+		}, {
+			"name": "value",
+			"editable": true,
+			"type": "float",
+			"value": 0.0
+		}]
+	}]
+}
+	

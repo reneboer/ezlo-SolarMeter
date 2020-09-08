@@ -12,10 +12,15 @@ local function d_poll(device)
 
 	-- Get device details and send http request for data. update script will handle response.
 	if device then
-		URI = URI:format(device.config.ip)
-		local hndlr = "HUB:"..PLUGIN.."/scripts/update_http"
-		logger.debug("Envoy Local URL %1, handler %2", URI, hndlr)
-		http.request { url = URI, handler = hndlr, user_data = device.device_id }
+		local config = loadfile("HUB:"..PLUGIN.."/scripts/utils/get_config")().get(device.id)
+		if config then
+			URI = URI:format(config.ip)
+			local hndlr = "HUB:"..PLUGIN.."/scripts/update_http"
+			logger.debug("Envoy Local URL %1, handler %2", URI, hndlr)
+			http.request { url = URI, handler = hndlr, user_data = device.device_id }
+		else
+			logger.err("Unable to get configuration for device %1.", math.floor(device.id))
+		end
 	else
 		logger.err("No device specified?")
 	end

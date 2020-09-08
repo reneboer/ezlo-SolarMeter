@@ -3,7 +3,7 @@
 	"label":"Universal Solar Meter",
 	"author":"Rene Boer",
 	"version":"1.0",
-	"log_level":3,
+	"log_level":5,
 	"remove_inactive":false
   },
   "devices": 
@@ -13,71 +13,78 @@
 		"name": "Enphase Local API",
 		"active": true,
 		"path": "enphase_local",
-		"poll_interval":60,
+		"poll_interval": 60,
+		"poll_dynamic": false,
 		"config": { 
-			"ip":""
+			"ip": "192.168.178.112"
 		}
 	},{
 		"id": 2,
 		"name": "Enphase Remote API",
 		"active": true,
 		"path": "enphase_remote",
-		"poll_interval":900,
+		"poll_interval": 900,
+		"poll_offset": 30,
+		"poll_dynamic": true,
+		"location": { 
+			"latitude": 0.0, 
+			"longitude": 0.0
+		},
 		"config": { 
-			"api_key":"",
-			"user_id":"",
-			"system_id":""
+			"api_key": "",
+			"user_id": "",
+			"system_id": ""
 		}
 	},{
 		"id": 3,
 		"name": "Solar Edge",
 		"active": false,
 		"path": "solar_egde",
-		"poll_interval":900,
+		"poll_interval": 900,
 		"config": { 
-			"api_key":"",
-			"system_id":""
+			"api_key": "",
+			"system_id": ""
 		}
 	},{
 		"id": 4,
 		"name": "PV Output",
 		"active": false,
 		"path": "pv_output",
-		"poll_interval":900,
+		"poll_interval": 900,
 		"config": { 
-			"api_key":"",
-			"system_id":"",
-			"https":true
+			"api_key": "",
+			"system_id": "",
+			"https": true
 		}
 	},{
 		"id": 5,
 		"name": "Sungrow",
 		"active": false,
 		"path": "sungrow",
-		"poll_interval":900,
+		"poll_interval": 900,
 		"config": { 
-			"user_id":"",
-			"password":""
+			"user_id": "",
+			"password": ""
 		}
 	},{
 		"id": 6,
 		"name": "Fronius",
 		"active": false,
 		"path": "fronius",
-		"poll_interval":900,
+		"poll_interval": 900,
 		"config": { 
-			"ip":"",
-			"device_id":""
+			"ip": "",
+			"device_id": ""
 		}
 	},{
 		"id": 7,
 		"name": "Solarman",
 		"active": false,
 		"path": "solarman",
-		"poll_interval":900,
+		"poll_interval": 600,
 		"config": { 
-			"token":"",
-			"device_id":""
+			"token": "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",
+			"device_id": "101018768"
 		}
 	} 
   ]

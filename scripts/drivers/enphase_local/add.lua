@@ -15,9 +15,6 @@ local function d_add(params)
 	-- Set device specific variables.
 	local device = params.device
 	local id = math.floor(device.id)
-	--if not storage.exists("WeeklyDaily"..id) then
-	--	storage.set_table("WeeklyDaily"..id, {0,0,0,0,0,0,0})
-	--end
 	if not storage.exists("MonthlyDaily"..id) then
 		storage.set_table("MonthlyDaily"..id, {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0})
 	end

@@ -11,18 +11,14 @@ local function poll(params)
 	local device = loadfile("HUB:"..PLUGIN.."/scripts/utils/get_device")().get(params.device_id)
 	logger.debug("device: %1", device)
 	if device then
-		local interval = device.poll_interval or 900
-		local timer_id = loadfile("HUB:"..PLUGIN.."/scripts/utils/get_timer_id")().get(device.id)
-		-- Call device timer calculation script if available
-		local handler = loadfile("HUB:"..PLUGIN.."/scripts/drivers/"..device.path.."/interval")
-		if handler then
-			interval = handler(device)
-		else
-			logger.debug("Device does not have interval script.")
+		if not device.poll_dynamic then
+			-- fixed polling will poll at fixed interval
+			local interval = device.poll_interval or 900
+			local timer_id = loadfile("HUB:"..PLUGIN.."/scripts/utils/get_timer_id")().get(device.id)
+			logger.debug("Setting fixed timer %1 to poll in %2 sec.", timer_id, interval)
+			timer.set_timeout_with_id(interval * 1000, timer_id, "HUB:"..PLUGIN.."/scripts/poll", {device_id = device.device_id})
 		end
-		logger.debug("Setting timer %1 to poll in %2 sec.", timer_id, interval)
-		timer.set_timeout_with_id(interval * 1000, timer_id, "HUB:"..PLUGIN.."/scripts/poll", {device_id = device.device_id})
-	
+		
 		-- Call device poll script
 		local handler = loadfile("HUB:"..PLUGIN.."/scripts/drivers/"..device.path.."/poll")
 		if handler then

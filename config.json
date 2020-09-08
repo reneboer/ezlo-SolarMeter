@@ -14,6 +14,7 @@
 	"permissions": [ "core", "storage", "timer", "http", "debug" ],
 	"startup": "scripts/startup",
 	"teardown": "scripts/teardown",
+	"sceneBlocks": "scene_blocks.json",
 	"gateway": {
 		"name": "SolarMeter",
 		"label": "Solar Meter",

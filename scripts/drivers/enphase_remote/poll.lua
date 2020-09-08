@@ -12,18 +12,16 @@ local function d_poll(device)
 	logger.debug("device: %1", device)
 
 	if device then
-		-- We do not poll at night time to avoid hitting API limit. For now only looks at hub location.
-		local location = core.get_location()
-		local isnight = loadfile("HUB:"..PLUGIN.."/scripts/utils/sun")().isnight(location.latitude, location.longitude) or false
-		if isnight and (storage.get_number("Watts"..id) == 0) then
-			logger.info("Skipping polling at night")
-		else	
-			local cnf = device.config
-			URI = URI:format(cnf.system_id, cnf.api_key, cnf.user_id)
+		local id = math.floor(device.id)
+		local config = loadfile("HUB:"..PLUGIN.."/scripts/utils/get_config")().get(id)
+		if config then
+			URI = URI:format(config.system_id, config.api_key, config.user_id)
 			local hndlr = "HUB:"..PLUGIN.."/scripts/update_http"
 			logger.debug("URL %1, handler %2", URI, hndlr)
 			http.request { url = URI, handler = hndlr, user_data = device.device_id }
-		end	
+		else
+			logger.err("Unable to get configuration for device %1.", id)
+		end
 	else
 		logger.err("No device specified?")
 	end
