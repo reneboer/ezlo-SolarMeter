@@ -2,7 +2,7 @@
 	Universal Solar Meter plugin for Ezo Linux based hubs
 	
 	File	: startup.lua
-	Version	: 2.0
+	Version	: 2.1
 	Author	: Rene Boer
 --]]
 local PLUGIN = "SolarMeter"
@@ -125,7 +125,7 @@ local function create_devices(devices)
 				if item then
 					device.kwh_week_itemId = item
 				else
-					logger.err("failed to create kwh_week item")
+					logger.err("failed to add kwh_week item")
 				end
 				if not device.kwh_month_itemId then
 					base_item.name = "electric_meter_kwh_month"
@@ -133,7 +133,7 @@ local function create_devices(devices)
 					if item then
 						device.kwh_month_itemId = item
 					else
-						logger.err("failed to create kwh_month item")
+						logger.err("failed to add kwh_month item")
 					end
 				end	
 				if not device.kwh_year_itemId then
@@ -142,7 +142,7 @@ local function create_devices(devices)
 					if item then
 						device.kwh_year_itemId = item
 					else
-						logger.err("failed to create kwh_year item")
+						logger.err("failed to add kwh_year item")
 					end
 				end	
 				if not device.kwh_life_itemId then
@@ -151,10 +151,25 @@ local function create_devices(devices)
 					if item then
 						device.kwh_life_itemId = item
 					else
-						logger.err("failed to create kwh_life item")
+						logger.err("failed to add kwh_life item")
 					end
 				end	
 			end
+			-- See if we need to add additional items we did not have in v2.0
+			if not device.last_update_itemId then
+				local item, err = core.add_item({
+					device_id = gw_devId,
+					name = "kwh_reading_timestamp",
+					value_type = "int",
+					value = os.time()-900,
+					has_getter = true,
+					has_setter = false })
+				if item then
+					device.kwh_reading_itemId = item
+				else
+					logger.err("failed to add last_refresh item")
+				end
+			end	
 			
 			-- Update mapping variables
 			loadfile("HUB:"..PLUGIN.."/scripts/utils/set_mapping")().set(gw_devId, device, d.config)

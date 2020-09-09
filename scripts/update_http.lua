@@ -53,6 +53,7 @@ local function update(params)
 						end
 						if res.timestamp ~= -1 then 
 							storage.set_number("LastRefresh"..id, res.timestamp)
+							core.update_item_value(device.kwh_reading_itemId, res.timestamp)
 							lastupdate = res.timestamp
 						end
 					end
