@@ -11,6 +11,9 @@ The plugin will only show as a power meter with the Watts and daily KWh values. 
 * Added dynamic polling for Enphase Remote API. This will calculate the best time to poll so it is close to the portal having an updated value, and stops polling at night. This can also be done for other system where the portal API includes a last update timestamp. 
 * Some overal code enhancements.
 
+### Changes for V2.0:
+* Added kwh_refresh_timestamp item that shows the last update time.
+
 ### Installation.
 To install first create a folder SolarMeter in the /home/data/custom_plugins folder. Make sure SolarMeter is spelled exact with the same letter casing (upper S, upper M).
 Next put all files in that folder, except this README and LICENSE. You must use the same folder structure. I.e. scripts, scripts/drivers, scripts/drivers/enphase_local, etc.
