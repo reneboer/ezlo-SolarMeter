@@ -2,7 +2,7 @@
 	Universal Solar Meter plugin for Ezo Linux based hubs
 	
 	File	: startup.lua
-	Version	: 2.1
+	Version	: 2.3
 	Author	: Rene Boer
 --]]
 local PLUGIN = "SolarMeter"
@@ -11,17 +11,47 @@ local core = require("core")
 local timer = require("timer")
 local logger = require("HUB:"..PLUGIN.."/scripts/utils/log").setPrefix(PLUGIN.."/scripts/startup").setLevel(storage.get_number("log_level") or 99)
 
--- Add item by using zwave module defaults as template.
-local function add_item(device, default_type, default_value, enum)
-	local base_item = require("HUB:zwave/scripts/model/items/default/"..default_type)
+-- Should match firmware\plugins\zwave\scripts\model\items\default as much as possible.
+local ItemDetails = {
+	electric_meter_watt = { 
+		name = "electric_meter_watt",
+		value_type = "power", 
+		value = {value = 0, scale = "watt"}, 
+		has_getter = true,
+		has_setter = false
+	}, 
+	electric_meter_kwh = { 
+		name = "electric_meter_kwh",
+		value_type = "amount_of_useful_energy", 
+		value = {value = 0, scale = "kilo_watt_hour"}, 
+		has_getter = true, 
+		has_setter = false
+	},
+	electric_meter_amper = {
+		name = "electric_meter_amper",
+		value_type = "electric_current", 
+		value = {value = 0, scale = "ampere"}, 
+		has_getter = true, 
+		has_setter = false
+	},
+	electric_meter_volt = { 
+		name = "electric_meter_volt",
+		value_type = "electric_potential", 
+		value = {value = 0, scale = "volt"}, 
+		has_getter = true, 
+		has_setter = false
+	}
+}
+
+-- Add item to device.
+local function add_item(device, item_name)
+	local base_item = ItemDetails[item_name]
 	base_item.device_id = device
-	if default_value then base_item.value = default_value end
-	if enum then base_item.enum = enum end
 	local item,err = core.add_item(base_item)
 	if item then
-		logger.debug("Add %1 item to %2: %3", default_type, device, item)
+		logger.debug("Add %1 item to %2: %3", item_name, device, item)
 	else	
-		logger.debug("Add %1 item to %2 failed. Error : %3", default_type, device, err)
+		logger.debug("Add %1 item to %2 failed. Error : %3", item_name, device, err)
 	end
 	return item
 end
@@ -35,6 +65,7 @@ end
 
 -- First run of plugin, do set-ups needed
 local function set_configuration(config)
+	logger.setLevel(config.log_level or 99)
 	logger.debug("set_configuration.config=%1", config)
 	if storage.get_string("PLUGIN") == nil then
 		-- First run, create storage objects we needed. Currently these values are not shown in UI.
@@ -44,7 +75,6 @@ local function set_configuration(config)
 	storage.set_string("version", config.version)
 	storage.set_number("log_level", config.log_level)
 	storage.set_bool("remove_inactive", config.remove_inactive)
-	logger.setLevel(config.log_level or 99)
 end
 
 local function create_devices(devices)
@@ -95,13 +125,6 @@ local function create_devices(devices)
 				device.kwh_itemId = add_item(gw_devId, "electric_meter_kwh")
 --				device.amper_itemId = add_item(gw_devId, "electric_meter_amper")
 --				device.volt_itemId = add_item(gw_devId, "electric_meter_volt")
-				first_storage_number("Watts"..id, 0)
-				first_storage_number("DayKWH"..id, 0)
-				first_storage_number("WeekKWH"..id, 0)
-				first_storage_number("MonthKWH"..id, 0)
-				first_storage_number("YearKWH"..id, 0)
-				first_storage_number("LifeKWH"..id, 0)
-				first_storage_number("LastRefresh"..id, os.time()-900)
 				-- Run device specific add routine.
 				local add = loadfile( "HUB:"..PLUGIN.."/scripts/drivers/"..d.path.."/add" )
 				if add then add({device = device, config = d.config}) end
@@ -118,7 +141,7 @@ local function create_devices(devices)
 			
 			-- See if we need to add additional items we did not have in v1.0
 			if not device.kwh_week_itemId then
-				local base_item = require("HUB:zwave/scripts/model/items/default/electric_meter_kwh")
+				local base_item = ItemDetails["electric_meter_kwh"]
 				base_item.device_id = gw_devId
 				base_item.name = "electric_meter_kwh_week"
 				local item, err = core.add_item(base_item)
@@ -156,7 +179,7 @@ local function create_devices(devices)
 				end	
 			end
 			-- See if we need to add additional items we did not have in v2.0
-			if not device.last_update_itemId then
+			if not device.kwh_reading_itemId then
 				local item, err = core.add_item({
 					device_id = gw_devId,
 					name = "kwh_reading_timestamp",
@@ -260,7 +283,6 @@ local function startup(...)
 	create_devices(config.devices)
 	
 	-- some clean up options. used as needed.
---	storage.delete("SM_M_5f564ef1124c4110b0d07122")
 end
 
 -- Actually run the startup function; pass all arguments, let the function sort it out.
