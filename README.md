@@ -5,7 +5,7 @@ This is one of the first Ezlo plugins out here and can give some pointers for ot
 
 The plugin will only show as a power meter with the Watts and daily KWh values. Other values are collected and stored, but cannot (yet) be displayed.
 
-### Changes for V2.0:
+### Changes for V2.1:
 * Added items for KWH Weekly, Monthly, Yearly and Lifetime. You can see these via the API Tool.
 * Added scene triggers for the new items. See file scene_blocks.json for how that is done.
 * Added dynamic polling for Enphase Remote API. This will calculate the best time to poll so it is close to the portal having an updated value, and stops polling at night. This can also be done for other system where the portal API includes a last update timestamp. 
