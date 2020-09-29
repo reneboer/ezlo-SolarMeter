@@ -41,11 +41,18 @@ The plugin is stopped with the following command (enter on hub)
 > /opt/firmware/bin/ha-infocmd hub.extensions.custom_plugin.unregister SolarMeter
 
 ### Uninstalling the plugin
-When you want to uninstall the plugin you must first delete all created power meters in the App. Currently the uninstall command does not remove the devices a plugin created, and after you uninstalled the plugin you cannot delete a device. This is a known bug that should be fixed.
-After deleting the devices with the following command (enter on hub)
+For full reset of plugin so we can start over. All mapped devices will be removed.
+1. First unregister then plugin and wait at least ten seconds.
+2. Call from the Ezlo API Tool using 
+{
+ "method": "extensions.plugin.run",
+ "id": "12345",
+ "params": { "script": "HUB:SolarMeter/scripts/reset_plugin" }
+}
+Last run the uninstall on the hub.
 > /opt/firmware/bin/ha-infocmd hub.extensions.custom_plugin.uninstall SolarMeter
 
-Next remove the plugin files else the plugin will reactivate at a reboot. You can also rename the config.json so starting the plugin will fail.
+If you want to start over you can use the same steps, update the SolarMeter.json and restart the plugin.
 
 ### The Makefile
 If you have a Linux system at hand (like a Pi) you can also first put the files on that. The included Makefile can be used for the steps above:
