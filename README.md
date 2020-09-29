@@ -44,11 +44,12 @@ The plugin is stopped with the following command (enter on hub)
 For full reset of plugin so we can start over. All mapped devices will be removed.
 1. First unregister then plugin and wait at least ten seconds.
 2. Call from the Ezlo API Tool using 
-{
- "method": "extensions.plugin.run",
- "id": "12345",
- "params": { "script": "HUB:SolarMeter/scripts/reset_plugin" }
-}
+> {
+>  "method": "extensions.plugin.run",
+>  "id": "12345",
+>  "params": { "script": "HUB:SolarMeter/scripts/reset_plugin" }
+> }
+
 Last run the uninstall on the hub.
 > /opt/firmware/bin/ha-infocmd hub.extensions.custom_plugin.uninstall SolarMeter
 
